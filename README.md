@@ -8,7 +8,8 @@
 ---
 
 ## 🧠 Project Title
-**Campus Buddy Bot** - Your AI Study Assistant
+
+**Campus Buddy Bot - Your Smart Study Companion**
 
 ---
 
@@ -101,3 +102,42 @@ python bot.py
   `Example: /define function`
 
 - **`/start`** - Welcome message and help
+### 🎯 Project Scope Clarification
+
+While our bot is called an "AI Study Assistant," we recognize that our initial features are utility-focused. Our vision is to build a **practical, helpful companion** that evolves over time. The "AI" aspect refers to our long-term vision of adding smarter features as we advance our skills but we will improve it.
+
+### 📊 Implementation Phases
+
+#### **Phase 1: MVP (Minimum Viable Product)**
+**Core Features for First Release:**
+1. **Assignment Tracker** - Add and manage deadlines
+2. **Study Schedule** - Basic calendar integration  
+3. **Quick Calculator** - Simple math calculations
+4. **Basic Bot Interface** - Clean command structure
+
+#### **Phase 2: Enhanced Features**
+1. **Exam Countdown** - Days until exams
+2. **Pomodoro Timer** - Focused study sessions
+3. **Simple Dictionary** - Programming terms
+
+#### **Phase 3: Advanced Features**
+1. **GPA Calculator** - Grade calculations
+2. **Motivational Quotes** - Study encouragement
+3. **Citation Helper** - Reference formatting
+
+### 🏗️ Modular Architecture
+
+**📅 Date Management Module**
+- Assignment Tracker
+- Exam Countdown  
+- Study Schedule
+
+**⏰ Study Session Module** 
+- Pomodoro Timer
+- Task Manager
+- Session-based Quotes
+
+**🧮 Academic Tools Module**
+- Calculator
+- Dictionary
+- GPA Calculator
