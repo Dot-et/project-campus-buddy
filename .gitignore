@@ -1,3 +1,32 @@
+
+# 1. SECRET CONFIGURATION FILES
+config.py
+*.token
+*.key
+secrets/
+.env
+.env.local
+
+# 2. PERSONAL TEST AND DEBUG FILES
+test_*.py
+*_test.py
+debug_*.py
+temp_*.py
+
+# 3. TELEGRAM BOT SPECIFIC
+bot.session  # Telegram session files
+*.session
+
+# 4. PERSONAL IDE SETTINGS (already partially covered)
+.vscode/     # Already in your file but ensure it's uncommented
+.idea/       # Already in your file but ensure it's uncommented
+
+# 5. DATABASE AND LOCAL DATA
+*.db
+*.sqlite
+*.sqlite3
+data/        
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
