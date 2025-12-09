@@ -64,6 +64,38 @@ async def deadlines_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Call module function and send result
     result = assignments.get_assignments()
     await update.message.reply_text(result)
+# it shows the one that was done 
+async def done_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not context.args:
+        await update.message.reply_text("❌ Usage: /done [assignment number]")
+        return
+
+    try:
+        number = int(context.args[0])
+    except ValueError:
+        await update.message.reply_text("❌ Assignment number must be a number.")
+        return
+
+    result = assignments.mark_done(number)
+    await update.message.reply_text(result)
+#  searching the assignment 
+async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not context.args:
+        await update.message.reply_text("❌ Usage: /search [keyword]")
+        return
+
+    keyword = " ".join(context.args)
+    result = assignments.search_assignment(keyword)
+    await update.message.reply_text(result)
+#   remendires the up_coming assignment 
+async def upcoming_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    result = assignments.upcoming_assignments()
+    await update.message.reply_text(result)
+# assignment statics
+async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    result = assignments.assignment_stats()
+    await update.message.reply_text(result)
+    
 
 
 # STUDY TOOLS COMMANDS
@@ -114,7 +146,11 @@ def main():
     # Assignment commands 
     application.add_handler(CommandHandler("add", add_command))
     application.add_handler(CommandHandler("deadlines", deadlines_command))  # FIXED!
-    
+    # New Assignment Commands
+    application.add_handler(CommandHandler("done", done_command))
+    application.add_handler(CommandHandler("search", search_command))
+    application.add_handler(CommandHandler("upcoming", upcoming_command))plication.add_handler(CommandHandler("stats", stats_command))
+    application.add_handler(CommandHandler("clear", clear_command))
     # Study tools commands
     application.add_handler(CommandHandler("calc", calc_command))
     application.add_handler(CommandHandler("schedule", schedule_command))
