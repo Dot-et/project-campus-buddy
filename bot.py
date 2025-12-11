@@ -92,7 +92,7 @@ async def upcoming_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     result = assignments.upcoming_assignments()
     await update.message.reply_text(result)
 # assignment statics
-async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def status_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     result = assignments.assignment_stats()
     await update.message.reply_text(result)
     
@@ -149,8 +149,9 @@ def main():
     # New Assignment Commands
     application.add_handler(CommandHandler("done", done_command))
     application.add_handler(CommandHandler("search", search_command))
-    application.add_handler(CommandHandler("upcoming", upcoming_command))plication.add_handler(CommandHandler("stats", stats_command))
-    application.add_handler(CommandHandler("clear", clear_command))
+    application.add_handler(CommandHandler("upcoming", upcoming_command))
+    application.add_handler(CommandHandler("status", status_command))
+    
     # Study tools commands
     application.add_handler(CommandHandler("calc", calc_command))
     application.add_handler(CommandHandler("schedule", schedule_command))
