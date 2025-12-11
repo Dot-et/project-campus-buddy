@@ -33,14 +33,14 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 📋 **AVAILABLE COMMANDS:**
 
-📅 **SCHEDULE (Soza):**
+📅 **SCHEDULE:**
 • /schedule - Today's study plan
 • /add_session [day] [time] [subject] - Add session
 • /week - Weekly schedule
 • /clear_day [day] - Clear day's schedule
 • /count - Count total sessions
 
-📚 **ASSIGNMENTS (Yeshi):**
+📚 **ASSIGNMENTS:**
 • /add [task] [date] - Add assignment
 • /deadlines - View all assignments
 • /delete [number] - Delete assignment
@@ -50,7 +50,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 • /upcoming - Upcoming assignments
 • /stats - Assignment statistics
 
-🧮 **CALCULATOR (Sara):**
+🧮 **CALCULATOR:**
 • /calc - Open scientific calculator
 • /calculate [expression] - Quick calculation
 
@@ -63,7 +63,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 • /add "Math HW" 2024-03-20
 • /calculate 5 + 3 * 2
     """
-    await update.message.reply_text(welcome_text, parse_mode='Markdown')
+    await update.message.reply_text(welcome_text)  # Remove parse_mode
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
