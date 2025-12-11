@@ -28,12 +28,12 @@
 
 ## 🛠️ In Progress
 
-### **Module Development**
+### **Module Developed**
 | Team Member | Module | Status | GitHub Branch |
 |-------------|---------|---------|---------------|
-| **Soza** | Schedule Module | In Development | `soza-features` |
-| **Yeshi** | Assignment Tracker |In Development  | `Yeshi_Dot-et` |
-| **Sara** | Calculator Module | In Development | `revert-2-sara23haile` |
+| **Soza** | Schedule Module | developed| `soza-features` |
+| **Yeshi** | Assignment Tracker |developed  | `Yeshi_Dot-et` |
+| **Sara** | Calculator Module | developed | `revert-2-sara23haile` |
 
 
 ## 📱 Bot Commands (MVP Phase 1)
@@ -54,7 +54,7 @@
 ### **Git Branch Strategy:**
 - `main` - Stable, production-ready code
 - `soza-features` - Schedule module branch
-- `revert-2-sara23haile` - Calculator module branch
+- `sara-features` - Calculator module branch
 - `Yeshi_Dot-et` - Assignment tracker branch
 
 ### **Team Coordination:**
