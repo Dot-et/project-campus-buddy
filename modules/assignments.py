@@ -10,7 +10,7 @@
 import os
 from datetime import datetime
 
-DATA_FILE =os.path.join(os.path.dirname(__file__), "assignments.txt"
+DATA_FILE =os.path.join(os.path.dirname(__file__), "assignments.txt")
 
 # -------------------------------
 # ADD ASSIGNMENT
