@@ -38,13 +38,13 @@ Campus Buddy Bot is a Telegram bot designed to help students manage their academ
 ## ⚙️ Key Features / Functionalities
 - ✅ **Assignment Tracker** - Add and view homework deadlines
 - ✅ **Pomodoro Timer** - 25-minute focused study sessions  
-- ✅ **Study Tips** - Random study advice and techniques
 - ✅ **Quick Calculator** - Fast math calculations
 - ✅ **GPA Calculator** - Calculate grade point average
 - ✅ **Exam Countdown** - Days remaining until exams
 - ✅ **Motivational Quotes** - Encouragement during studies
-- ✅ **Simple Dictionary** - Programming term definitions
-
+- ✅ **Simple Dictionary** - english dictionary
+- ✅ **Study Schedule** - Basic calendar integration 
+- ✅ **Citation Helper** - Reference formatting
 ---
 
 ## 🧩 Team Members
@@ -90,7 +90,6 @@ python bot.py
 ### ⏰ Study Assistance
 - **`/pomodoro`** - Start 25-minute focused study session
 
-- **`/tip`** - Get random study technique tip
 
 - **`/motivate`** - Receive encouragement quote
 
@@ -98,7 +97,7 @@ python bot.py
 - **`/calc [math]`** - Quick calculations
   `Example: /calc (5 + 3) * 2`
 
-- **`/define [term]`** - Programming dictionary
+- **`/define [term]`** -  dictionary
   `Example: /define function`
 
 - **`/start`** - Welcome message and help
