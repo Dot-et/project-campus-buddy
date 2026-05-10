@@ -1,4 +1,7 @@
 # bot.py - Campus Buddy Bot (SECURE VERSION)
+import os
+
+TOKEN = os.getenv("BOT_TOKEN")
 import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes, CallbackQueryHandler
@@ -9,8 +12,8 @@ from modules.calculator import start_calculator, calculator_buttons  # FIXED IMP
 from modules.gpa_calculator import GPAManager
 from modules import citation, pomodoro_timer, exam_countdown, quotes, dictionary
 
-# Import config
-import config
+
+
 
 # Enable logging
 logging.basicConfig(
