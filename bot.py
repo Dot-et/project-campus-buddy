@@ -1,4 +1,4 @@
-- Campus Buddy Bot (SECURE VERSION)
+# Campus Buddy Bot (SECURE VERSION)
 
 import os
 import logging
