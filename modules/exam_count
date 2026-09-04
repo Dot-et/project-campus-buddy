@@ -1,0 +1,57 @@
+# Campus Buddy - Exam Count
+
+def count_exams(exams):
+    """
+    Count exams.
+
+    exams format:
+    [
+        ("Database", "2026-09-10"),
+        ("Software Engineering", "2026-09-15")
+    ]
+    """
+
+    if not exams:
+        return "📭 No exams added."
+
+    total = len(exams)
+
+    message = (
+        "📝 EXAM COUNT\n\n"
+        f"📊 Total Exams: {total}\n\n"
+    )
+
+    for i, exam in enumerate(exams, 1):
+        name, date = exam
+
+        message += (
+            f"{i}. 📚 {name}\n"
+            f"   📅 {date}\n\n"
+        )
+
+    return message
+
+
+def total_exams(exams):
+    """Return the number of exams."""
+
+    return len(exams)
+
+
+def exam_count_message(exams):
+    """Simple exam count message."""
+
+    total = len(exams)
+
+    if total == 0:
+        return "📭 You have no exams."
+
+    return f"📝 You have {total} exam(s)."
+
+
+def clear_exams(exams):
+    """Clear all exams."""
+
+    exams.clear()
+
+    return "🗑️ All exams have been cleared."

@@ -1,21 +1,25 @@
+# modules/calculator.py
+# Campus Buddy - Scientific Calculator
+
 import math
 import sympy as sp
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
-# =========================
-# USER DATA STORAGE
-# =========================
+
 user_calc = {}
 
-# =========================
-# SAFE MATH + REAL INTEGRATION
-# =========================
+
 def safe_eval(expr, mode="DEG"):
     try:
-        expr = expr.replace("÷", "/").replace("×", "*").replace("^", "**")
+        expr = expr.replace("÷", "/")
+        expr = expr.replace("×", "*")
+        expr = expr.replace("^", "**")
 
-        # DEG / RAD handling
+        if not expr.strip():
+            return 0
+
         if mode == "DEG":
             sin = lambda x: math.sin(math.radians(x))
             cos = lambda x: math.cos(math.radians(x))
@@ -25,9 +29,9 @@ def safe_eval(expr, mode="DEG"):
             cos = math.cos
             tan = math.tan
 
-        def safe_factorial(x):
+        def factorial(x):
             if not float(x).is_integer() or x < 0:
-                raise ValueError("Factorial only for whole numbers")
+                raise ValueError("Factorial requires a non-negative whole number")
             return math.factorial(int(x))
 
         safe_dict = {
@@ -42,65 +46,153 @@ def safe_eval(expr, mode="DEG"):
             "ln": math.log,
             "pi": math.pi,
             "e": math.e,
-            "factorial": safe_factorial,
+            "factorial": factorial,
             "abs": abs,
-            "sum": sum
         }
 
-        return eval(expr, {"__builtins__": None}, safe_dict)
+        return eval(
+            expr,
+            {"__builtins__": {}},
+            safe_dict
+        )
 
     except ZeroDivisionError:
-        return "Error: Division by zero happen undefined "
-    except SyntaxError:
-        return "Error: Wrong format or input"
+        return "❌ Division by zero"
+
     except ValueError as e:
-        return f"Error: {str(e)}"
+        return f"❌ {e}"
+
+    except SyntaxError:
+        return "❌ Invalid expression"
+
     except Exception:
-        return "Calculation error"
+        return "❌ Calculation error"
 
 
-# =========================
-# REAL INTEGRATION ENGINE 
-#for this integration uses this form x**2 Then presses the ∫ button BOT OUTPUT ∫ x**2 dx = x**3/3
-# ==========================
 def real_integration(expression):
     try:
-        x = sp.symbols('x')
+        x = sp.symbols("x")
+
+        expression = expression.replace("^", "**")
+
         expr = sp.sympify(expression)
+
         result = sp.integrate(expr, x)
+
         return f"∫ {expression} dx = {result}"
+
     except Exception:
-        return "Integration error (use x as variable)"
+        return "❌ Integration error\nUse x as the variable."
 
 
-# =========================
-# KEYBOARD LAYOUT (MOBILE)
-# =========================
 def calculator_keyboard():
+
     keys = [
-        [("Rad", "Rad"), ("Deg", "Deg"), ("⌫", "⌫"), ("C", "C")],
-        [("sin", "sin("), ("cos", "cos("), ("tan", "tan("), ("√", "sqrt(")],
-        [("sin⁻¹", "asin("), ("cos⁻¹", "acos("), ("tan⁻¹", "atan("), ("!", "factorial(")],
-        [("log", "log("), ("ln", "ln("), ("π", "pi"), ("e", "e")],
-        [("(", "("), (")", ")"), ("^", "^"), ("%", "%")],
-        [("7", "7"), ("8", "8"), ("9", "÷")],
-        [("4", "4"), ("5", "5"), ("6", "×")],
-        [("1", "1"), ("2", "2"), ("3", "-")],
-        [("0", "0"), (".", "."), ("=", "="), ("+", "+")],
-        [("M+", "M+"), ("MR", "MR"), ("Σ", "SUM"), ("∫", "INT")],
-        [("History", "HISTORY"), ("Exit", "EXIT")]
+        [
+            ("RAD", "calc_rad"),
+            ("DEG", "calc_deg"),
+            ("⌫", "calc_back"),
+            ("C", "calc_clear")
+        ],
+
+        [
+            ("sin", "sin("),
+            ("cos", "cos("),
+            ("tan", "tan("),
+            ("√", "sqrt(")
+        ],
+
+        [
+            ("sin⁻¹", "asin("),
+            ("cos⁻¹", "acos("),
+            ("tan⁻¹", "atan("),
+            ("!", "factorial(")
+        ],
+
+        [
+            ("log", "log("),
+            ("ln", "ln("),
+            ("π", "pi"),
+            ("e", "e")
+        ],
+
+        [
+            ("(", "("),
+            (")", ")"),
+            ("^", "^"),
+            ("%", "%")
+        ],
+
+        [
+            ("7", "7"),
+            ("8", "8"),
+            ("9", "9"),
+            ("÷", "÷")
+        ],
+
+        [
+            ("4", "4"),
+            ("5", "5"),
+            ("6", "6"),
+            ("×", "×")
+        ],
+
+        [
+            ("1", "1"),
+            ("2", "2"),
+            ("3", "3"),
+            ("−", "-")
+        ],
+
+        [
+            ("0", "0"),
+            (".", "."),
+            ("=", "calc_equals"),
+            ("+", "+")
+        ],
+
+        [
+            ("M+", "calc_mplus"),
+            ("MR", "calc_mr"),
+            ("∫", "calc_integral"),
+            ("History", "calc_history")
+        ],
+
+        [
+            ("Exit", "calc_exit")
+        ]
     ]
 
-    return InlineKeyboardMarkup([
-        [InlineKeyboardButton(text=t, callback_data=d) for t, d in row]
-        for row in keys
-    ])
+    keyboard = []
+
+    for row in keys:
+        keyboard.append([
+            InlineKeyboardButton(
+                text=text,
+                callback_data=data
+            )
+            for text, data in row
+        ])
+
+    return InlineKeyboardMarkup(keyboard)
 
 
-# =========================
-# START CALCULATOR
-# =========================
-async def start_calculator(update: Update, context: ContextTypes.DEFAULT_TYPE):
+def calculator_text(data):
+
+    expression = data["expr"]
+
+    return (
+        "🧮 SCIENTIFIC CALCULATOR\n\n"
+        f"Mode: {data['mode']}\n"
+        f"Expression:\n{expression or '0'}"
+    )
+
+
+async def start_calculator(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
     user_id = update.effective_user.id
 
     user_calc[user_id] = {
@@ -110,106 +202,160 @@ async def start_calculator(update: Update, context: ContextTypes.DEFAULT_TYPE):
         "memory": 0
     }
 
-    await update.message.reply_text(
-        "Scientific Calculator\n\nExpression:\n0",
+    await update.effective_message.reply_text(
+        calculator_text(user_calc[user_id]),
         reply_markup=calculator_keyboard()
     )
 
 
-# =========================
-# BUTTON HANDLER
-# =========================
-async def calculator_buttons(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def calculator_buttons(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE
+):
+
     query = update.callback_query
+
     await query.answer()
 
     user_id = query.from_user.id
-    key = query.data
 
     if user_id not in user_calc:
-        return
+        user_calc[user_id] = {
+            "expr": "",
+            "mode": "DEG",
+            "history": [],
+            "memory": 0
+        }
 
     data = user_calc[user_id]
+    key = query.data
 
-    # CLEAR
-    if key == "C":
+    # Clear
+    if key == "calc_clear":
         data["expr"] = ""
 
-    # BACKSPACE
-    elif key == "⌫":
+    # Backspace
+    elif key == "calc_back":
         data["expr"] = data["expr"][:-1]
 
-    # MODE
-    elif key == "Deg":
+    # Degree mode
+    elif key == "calc_deg":
         data["mode"] = "DEG"
 
-    elif key == "Rad":
+    # Radian mode
+    elif key == "calc_rad":
         data["mode"] = "RAD"
 
-    # MEMORY ADD
-    elif key == "M+":
-        result = safe_eval(data["expr"], data["mode"])
-        if isinstance(result, (int, float)):
-            data["memory"] += result
-            data["expr"] = str(data["memory"])
+    # Equals
+    elif key == "calc_equals":
 
-    # MEMORY READ
-    elif key == "MR":
-        data["expr"] = str(data["memory"])
+        if not data["expr"]:
+            result = "0"
 
-    # SUMMATION HELP
-    elif key == "SUM":
-        await query.message.edit_text(
-            "Use format:  sum([1,2,3,4])",
-            reply_markup=calculator_keyboard()
+        else:
+            result = safe_eval(
+                data["expr"],
+                data["mode"]
+            )
+
+        data["history"].append(
+            f"{data['expr']} = {result}"
         )
-        return
 
-    # REAL INTEGRATION
-    elif key == "INT":
-        result = real_integration(data["expr"])
-        data["history"].append(result)
-        data["expr"] = ""
+        data["expr"] = str(result)
+
+    # Memory plus
+    elif key == "calc_mplus":
+
+        result = safe_eval(
+            data["expr"],
+            data["mode"]
+        )
+
+        if isinstance(result, (int, float)):
+
+            data["memory"] += result
+
+            data["expr"] = str(
+                data["memory"]
+            )
+
+    # Memory recall
+    elif key == "calc_mr":
+
+        data["expr"] = str(
+            data["memory"]
+        )
+
+    # Integration
+    elif key == "calc_integral":
+
+        if not data["expr"]:
+
+            result = "❌ Enter an expression first."
+
+        else:
+
+            result = real_integration(
+                data["expr"]
+            )
+
+            data["history"].append(result)
+
         await query.message.edit_text(
             result,
             reply_markup=calculator_keyboard()
         )
+
         return
 
-    # EQUAL
-    elif key == "=":
-        result = safe_eval(data["expr"], data["mode"])
-        data["history"].append(f"{data['expr']} = {result}")
-        data["expr"] = str(result)
+    # History
+    elif key == "calc_history":
 
-    # HISTORY
-    elif key == "HISTORY":
-        history_text = "\n".join(data["history"]) or "No history yet."
+        history = data["history"]
+
+        if history:
+            history_text = "\n".join(
+                f"{i}. {item}"
+                for i, item in enumerate(history, 1)
+            )
+        else:
+            history_text = "No calculations yet."
+
         await query.message.edit_text(
-            f"History:\n{history_text}",
+            "📜 CALCULATOR HISTORY\n\n"
+            + history_text,
             reply_markup=calculator_keyboard()
         )
+
         return
 
-    # EXIT
-    elif key == "EXIT":
-        del user_calc[user_id]
-        await query.message.edit_text("Calculator Closed")
+    # Exit
+    elif key == "calc_exit":
+
+        user_calc.pop(user_id, None)
+
+        await query.message.edit_text(
+            "✅ Calculator closed.\n\n"
+            "Use the main menu to open it again."
+        )
+
         return
 
-    # NORMAL KEYS
+    # Normal calculator button
     else:
+
         data["expr"] += key
 
-    text = f" Mode: {data['mode']}\n\nExpression:\n{data['expr'] or '0'}"
-    await query.message.edit_text(text, reply_markup=calculator_keyboard())
+    await query.message.edit_text(
+        calculator_text(data),
+        reply_markup=calculator_keyboard()
+    )
 
 
-# =========================
-# EXPORT HANDLERS
-# =========================
 def calculate_start_handler():
     return start_calculator
+
 
 def calculate_button_handler():
     return calculator_buttons
