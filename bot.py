@@ -1,8 +1,8 @@
-# bot.py - Campus Buddy Bot (SECURE VERSION)
+- Campus Buddy Bot (SECURE VERSION)
 
 import os
 import logging
-from telegram import Update
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import (
     Application,
     CommandHandler,
@@ -42,83 +42,48 @@ gpa_manager = GPAManager()
 # START COMMAND
 # ========================
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-
     welcome_text = """
-🎓 Welcome to Campus Buddy Assistant
+╔══════════════════════════════╗
+║       🎓 CAMPUS BUDDY       ║
+║   Your Smart Academic Mate  ║
+╚══════════════════════════════╝
 
-Developed by:
-• Yeshi Geleta
-• Soza Tamirat
-• Sara Hailemariam
+✨ Welcome to Campus Buddy!
 
-━━━━━━━━━━━━━━
-✨ SMART LEARNING BOT
-━━━━━━━━━━━━━━
+Your all-in-one academic assistant
+for managing university life.
 
-📚 Features:
-• Notes & Study Materials
-• Schedule Manager
-• GPA Calculator
-• Scientific Calculator
-• Exam Tracker
-• Pomodoro Timer
-• Dictionary
-• Motivational Quotes
+📚 Assignments
+🎓 GPA & CGPA
+📅 Schedule
+🧮 Calculator
+⏰ Study Tools
+📝 Exam Tracker
+📖 Learning Tools
+💫 Motivation
 
-👇 Type a command to begin!
-
-📋 AVAILABLE COMMANDS:
-
-📅 SCHEDULE:
-• /schedule
-• /add_session [day] [time] [subject]
-• /week
-• /clear_day [day]
-• /count
-
-📚 ASSIGNMENTS:
-• /add [task] [date]
-• /deadlines
-• /delete [number]
-• /edit [number] [new_task] [new_date]
-• /done [number]
-• /search [keyword]
-• /upcoming
-• /stats
-
-🧮 CALCULATOR:
-• /calc
-• /calculate [expression]
-
-🎓 GPA/CGPA:
-• /add_course [name] [score] [credit]
-• /semester_gpa
-• /cgpa
-• /new_semester
-
-⏰ STUDY TOOLS:
-• /pomodoro
-• /pomodoro_pause
-• /pomodoro_resume
-• /pomodoro_stop
-
-📅 EXAM TRACKER:
-• /addexam [name] [date] [time]
-• /exams
-• /deleteexam [name]
-
-📚 DICTIONARY:
-• /define [word]
-
-💫 MOTIVATION:
-• /quote
-• /motivate
-
-📖 CITATIONS:
-• /citations
+👇 Choose a feature below:
 """
 
-    await update.message.reply_text(welcome_text)
+    keyboard = [
+        ["📚 Assignments", "🎓 GPA & CGPA"],
+        ["📅 Schedule", "🧮 Calculator"],
+        ["⏰ Study Tools", "📝 Exam Tracker"],
+        ["📖 Learning Tools", "💫 Motivation"],
+        ["❓ Help & Commands"],
+    ]
+
+    reply_markup = ReplyKeyboardMarkup(
+        keyboard,
+        resize_keyboard=True,
+        one_time_keyboard=False
+    )
+
+    await update.message.reply_text(
+        welcome_text,
+        reply_markup=reply_markup
+    )
+
 
 # ========================
 # HELP COMMAND
@@ -129,7 +94,196 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ========================
 # SCHEDULE COMMANDS
 # ========================
-async def schedule_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def s# ========================
+# CLICKABLE MENU
+# ========================
+async def menu_router(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Handle the main clickable Campus Buddy menu."""
+    choice = update.message.text
+
+    if choice == "📚 Assignments":
+        await update.message.reply_text(
+            """📚 ASSIGNMENTS
+
+Choose an action:
+
+➕ Add: /add [task] [date]
+📋 Deadlines: /deadlines
+🔎 Search: /search [keyword]
+⬆️ Upcoming: /upcoming
+📊 Statistics: /stats
+✅ Done: /done [number]
+✏️ Edit: /edit [number] [task] [date]
+🗑️ Delete: /delete [number]""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "🎓 GPA & CGPA"],
+                 ["📅 Schedule", "⏰ Study Tools"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "🎓 GPA & CGPA":
+        await update.message.reply_text(
+            """🎓 GPA & CGPA
+
+➕ Add Course
+Use: /add_course [name] [score] [credit]
+
+📊 Semester GPA
+Use: /semester_gpa
+
+🏆 CGPA
+Use: /cgpa
+
+🔄 New Semester
+Use: /new_semester""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "📚 Assignments"],
+                 ["📅 Schedule", "🧮 Calculator"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "📅 Schedule":
+        await update.message.reply_text(
+            """📅 SMART SCHEDULE
+
+📖 Today's Schedule
+/schedule
+
+➕ Add Class
+/add_session [day] [time] [subject]
+
+📆 Weekly Schedule
+/week
+
+🗑️ Clear Day
+/clear_day [day]
+
+🔢 Count Sessions
+/count""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "📚 Assignments"],
+                 ["🎓 GPA & CGPA", "📝 Exam Tracker"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "🧮 Calculator":
+        await update.message.reply_text(
+            """🧮 CALCULATOR
+
+🔢 Quick Calculation
+/calculate 2+2*3
+
+⚡ Scientific Calculator
+/calc
+
+Example:
+ /calculate 15*4+20""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "🎓 GPA & CGPA"],
+                 ["📖 Learning Tools", "⏰ Study Tools"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "⏰ Study Tools":
+        await update.message.reply_text(
+            """⏰ STUDY TOOLS
+
+🍅 Start Pomodoro
+/pomodoro
+
+⏸️ Pause
+/pomodoro_pause
+
+▶️ Resume
+/pomodoro_resume
+
+⏹️ Stop
+/pomodoro_stop""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "📚 Assignments"],
+                 ["📝 Exam Tracker", "💫 Motivation"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "📝 Exam Tracker":
+        await update.message.reply_text(
+            """📝 EXAM TRACKER
+
+➕ Add Exam
+/addexam [name] [date] [time]
+
+📋 View Exams
+/exams
+
+🗑️ Delete Exam
+/deleteexam [name]""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "📅 Schedule"],
+                 ["🎓 GPA & CGPA", "⏰ Study Tools"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "📖 Learning Tools":
+        await update.message.reply_text(
+            """📖 LEARNING TOOLS
+
+🔤 Dictionary
+/define [word]
+
+📚 Citation Manager
+/citations
+
+Example:
+ /define algorithm""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "🧮 Calculator"],
+                 ["💫 Motivation", "📚 Assignments"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "💫 Motivation":
+        await update.message.reply_text(
+            """💫 MOTIVATION
+
+💬 Daily Quote
+/quote
+
+✨ Get Motivated
+/motivate
+
+Keep learning. Keep building. 🚀""",
+            reply_markup=ReplyKeyboardMarkup(
+                [["🏠 Main Menu", "⏰ Study Tools"],
+                 ["📖 Learning Tools", "📚 Assignments"]],
+                resize_keyboard=True
+            )
+        )
+
+    elif choice == "❓ Help & Commands":
+        await update.message.reply_text(
+            """❓ CAMPUS BUDDY HELP
+
+Use the buttons to explore Campus Buddy,
+or type /help to see all available commands.
+
+🏠 /start — Main menu
+❓ /help — Commands
+
+🚀 Happy learning!"""
+        )
+
+    elif choice == "🏠 Main Menu":
+        await start(update, context)
+
+
+chedule_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     result = schedule.get_todays_schedule(user_id)
     await update.message.reply_text(result)
@@ -493,6 +647,9 @@ def main():
 
     # Citations
     application.add_handler(CommandHandler("citations", citations_command))
+
+    # Clickable menu
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, menu_router))
 
     # Unknown commands
     application.add_handler(MessageHandler(filters.COMMAND, unknown_command))
